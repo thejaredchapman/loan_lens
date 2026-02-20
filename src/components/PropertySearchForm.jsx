@@ -11,7 +11,7 @@ export default function PropertySearchForm() {
   const product = LOAN_PRODUCTS.find((p) => p.id === loanProductId);
 
   return (
-    <div className="rounded-xl bg-white/5 border border-white/10 p-5 mb-6 backdrop-blur-sm">
+    <div className="relative z-20 rounded-xl bg-white/5 border border-white/10 p-5 mb-6 backdrop-blur-sm">
       <h3 className="text-sm font-medium text-white/60 mb-4 uppercase tracking-wider">
         {product.id === 'home' ? 'Property Details' : `${product.name} Details`}
       </h3>
