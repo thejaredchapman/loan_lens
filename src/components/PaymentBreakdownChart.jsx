@@ -1,47 +1,33 @@
+import { COMPONENT_COLORS } from '../data/chartColors';
+
 export default function PaymentBreakdownChart({ piti, product }) {
   if (!piti || piti.totalMonthly === 0) return null;
 
-  const segments = [];
   const total = piti.totalMonthly;
+  const segments = [{ label: 'Principal & interest', value: piti.monthlyPrincipalAndInterest, color: COMPONENT_COLORS.pi }];
+  if (product.includesTax && piti.monthlyTax > 0) segments.push({ label: 'Tax', value: piti.monthlyTax, color: COMPONENT_COLORS.tax });
+  if (product.includesInsurance && piti.monthlyInsurance > 0) segments.push({ label: 'Insurance', value: piti.monthlyInsurance, color: COMPONENT_COLORS.ins });
+  if (piti.monthlyPMI > 0) segments.push({ label: 'PMI', value: piti.monthlyPMI, color: COMPONENT_COLORS.pmi });
 
-  segments.push({
-    label: 'Principal & Interest',
-    value: piti.monthlyPrincipalAndInterest,
-    color: product.theme.accent,
-  });
-
-  if (product.includesTax && piti.monthlyTax > 0) {
-    segments.push({ label: 'Tax', value: piti.monthlyTax, color: '#f59e0b' });
-  }
-  if (product.includesInsurance && piti.monthlyInsurance > 0) {
-    segments.push({ label: 'Insurance', value: piti.monthlyInsurance, color: '#10b981' });
-  }
-  if (piti.monthlyPMI > 0) {
-    segments.push({ label: 'PMI', value: piti.monthlyPMI, color: '#f43f5e' });
-  }
-
-  // Build SVG donut
   const size = 180;
-  const strokeWidth = 30;
+  const strokeWidth = 34;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   let offset = 0;
 
   const arcs = segments.map((seg) => {
     const pct = seg.value / total;
-    const dashArray = `${pct * circumference} ${circumference}`;
-    const dashOffset = -offset * circumference;
+    const arc = { ...seg, dashArray: `${pct * circumference} ${circumference}`, dashOffset: -offset * circumference, pct };
     offset += pct;
-    return { ...seg, dashArray, dashOffset, pct };
+    return arc;
   });
 
   return (
-    <div className="rounded-xl bg-white/5 border border-white/10 p-5 mb-6 backdrop-blur-sm">
-      <h3 className="text-sm font-medium text-white/60 mb-4 uppercase tracking-wider">
-        Payment Distribution
-      </h3>
-      <div className="flex flex-col sm:flex-row items-center gap-6">
-        <svg width={size} height={size} className="flex-shrink-0">
+    <section className="panel lg:col-span-2 rise" style={{ '--i': 4 }}>
+      <h3 className="kicker mb-5">Where it goes</h3>
+      <div className="flex flex-col items-center gap-6">
+        <svg width={size} height={size} role="img" aria-label="Payment distribution donut chart">
+          <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#d9d1c0" strokeWidth={strokeWidth} opacity="0.4" />
           {arcs.map((arc, i) => (
             <circle
               key={i}
@@ -54,41 +40,24 @@ export default function PaymentBreakdownChart({ piti, product }) {
               strokeDasharray={arc.dashArray}
               strokeDashoffset={arc.dashOffset}
               transform={`rotate(-90 ${size / 2} ${size / 2})`}
-              className="transition-all duration-500"
+              style={{ transition: 'stroke-dasharray .5s' }}
             />
           ))}
-          <text
-            x={size / 2}
-            y={size / 2 - 6}
-            textAnchor="middle"
-            className="fill-white text-lg font-bold"
-            fontSize="18"
-          >
-            ${Math.round(total)}
+          <text x={size / 2} y={size / 2 + 4} textAnchor="middle" fill="#17140f" fontSize="22" fontWeight="800" fontFamily="Fraunces, serif">
+            ${Math.round(total).toLocaleString()}
           </text>
-          <text
-            x={size / 2}
-            y={size / 2 + 12}
-            textAnchor="middle"
-            className="fill-white/50"
-            fontSize="11"
-          >
-            /month
-          </text>
+          <text x={size / 2} y={size / 2 + 22} textAnchor="middle" fill="#6b6457" fontSize="11">per month</text>
         </svg>
 
-        <div className="space-y-2 flex-1">
+        <ul className="w-full space-y-2">
           {arcs.map((arc, i) => (
-            <div key={i} className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: arc.color }} />
-                <span className="text-sm text-white/70">{arc.label}</span>
-              </div>
-              <span className="text-sm text-white/50">{(arc.pct * 100).toFixed(1)}%</span>
-            </div>
+            <li key={i} className="flex items-center justify-between gap-4 text-sm">
+              <span className="flex items-center gap-3"><span className="w-3 h-3" style={{ background: arc.color }} />{arc.label}</span>
+              <span className="num text-muted">{(arc.pct * 100).toFixed(1)}%</span>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
-    </div>
+    </section>
   );
 }

@@ -24,28 +24,22 @@ export default function AffordabilityResult({
   const monthlyBudget = calculateMaxMonthlyBudget(annualSalary, dtiRatio);
 
   return (
-    <div className="rounded-xl bg-white/5 border border-white/10 p-5 mb-6 backdrop-blur-sm">
-      <h3 className="text-sm font-medium text-white/60 mb-3 uppercase tracking-wider">
-        What You Can Afford
-      </h3>
-      <div className="text-center mb-4">
-        <div className="text-4xl font-bold text-white">{formatCurrency(maxPrice)}</div>
-        <div className="text-sm text-white/50 mt-1">
-          maximum {product?.id === 'home' ? 'property price' : 'loan amount'}
-        </div>
+    <section className="panel rise" style={{ '--i': 3 }}>
+      <h3 className="kicker mb-4">What you can afford</h3>
+      <div className="flex flex-wrap items-baseline gap-x-3">
+        <span className="display text-6xl sm:text-7xl font-extrabold text-[var(--accent)] leading-none">{formatCurrency(maxPrice)}</span>
+        <span className="text-muted text-sm">maximum {product?.id === 'home' ? 'property price' : 'loan amount'}</span>
       </div>
-      <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/10">
-        <div className="text-center">
-          <div className="text-xs text-white/40 mb-1">Monthly Budget</div>
-          <div className="text-sm font-semibold text-white">{formatCurrencyDetailed(monthlyBudget)}</div>
+      <dl className="grid grid-cols-2 gap-4 mt-6 pt-5 border-t border-ink">
+        <div>
+          <dt className="field-label !mb-1">Monthly budget</dt>
+          <dd className="num text-base font-medium">{formatCurrencyDetailed(monthlyBudget)}</dd>
         </div>
-        <div className="text-center">
-          <div className="text-xs text-white/40 mb-1">Down Payment Needed</div>
-          <div className="text-sm font-semibold text-white">
-            {formatCurrency(maxPrice * downPaymentPercent / 100)}
-          </div>
+        <div>
+          <dt className="field-label !mb-1">Down payment needed</dt>
+          <dd className="num text-base font-medium">{formatCurrency(maxPrice * downPaymentPercent / 100)}</dd>
         </div>
-      </div>
-    </div>
+      </dl>
+    </section>
   );
 }

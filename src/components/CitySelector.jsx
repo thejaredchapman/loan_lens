@@ -30,24 +30,27 @@ export default function CitySelector() {
 
   return (
     <div className="relative" ref={wrapperRef}>
-      <label className="block text-xs text-white/50 mb-1">City</label>
+      <label className="field-label">City</label>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-3 py-2.5 rounded-lg bg-white/10 border border-white/15 text-white text-sm text-left hover:bg-white/15 transition cursor-pointer"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        className="field text-left !font-sans flex justify-between items-center cursor-pointer"
       >
-        {selectedCity ? `${selectedCity.name}, ${selectedCity.state}` : 'Select a city...'}
-        <span className="float-right text-white/40">▾</span>
+        <span>{selectedCity ? `${selectedCity.name}, ${selectedCity.state}` : 'Select a city...'}</span>
+        <span className="text-muted text-xs">▾</span>
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 mt-1 w-full rounded-lg bg-slate-800 border border-white/15 shadow-xl overflow-hidden">
-          <div className="p-2 border-b border-white/10">
+        <div className="absolute z-50 mt-1 w-full bg-card border-[1.5px] border-ink shadow-[4px_4px_0_var(--color-ink)]">
+          <div className="p-2 border-b border-rule">
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search cities..."
-              className="w-full px-3 py-2 rounded-md bg-white/10 border border-white/10 text-white text-sm placeholder-white/30 outline-none focus:border-white/30"
+              aria-label="Search cities"
+              className="field !font-sans !py-2 text-sm"
               autoFocus
             />
           </div>
@@ -60,18 +63,16 @@ export default function CitySelector() {
                   setIsOpen(false);
                   setSearch('');
                 }}
-                className={`w-full px-3 py-2 text-left text-sm hover:bg-white/10 transition cursor-pointer ${
-                  city.id === selectedCityId ? 'bg-white/10 text-white' : 'text-white/70'
+                className={`w-full px-3 py-2 text-left text-sm flex justify-between gap-3 hover:bg-paper cursor-pointer ${
+                  city.id === selectedCityId ? 'bg-[var(--accent-soft)] font-semibold' : ''
                 }`}
               >
-                {city.name}, {city.state}
-                <span className="float-right text-white/30 text-xs">
-                  Median: ${city.demographics.medianHomePrice.toLocaleString()}
-                </span>
+                <span>{city.name}, {city.state}</span>
+                <span className="num text-muted text-xs self-center">${city.demographics.medianHomePrice.toLocaleString()}</span>
               </button>
             ))}
             {filtered.length === 0 && (
-              <div className="px-3 py-4 text-center text-white/30 text-sm">No cities found</div>
+              <div className="px-3 py-4 text-center text-muted text-sm">No cities found</div>
             )}
           </div>
         </div>

@@ -12,34 +12,29 @@ export default function LoanProductSelector() {
   };
 
   return (
-    <div className="mb-6">
-      <h2 className="text-sm font-medium text-white/60 mb-3 uppercase tracking-wider">Loan Product</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {LOAN_PRODUCTS.map((product) => {
+    <section className="mb-8 rise">
+      <h2 className="kicker mb-3">Choose a loan</h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 border-[1.5px] border-ink bg-card" role="radiogroup" aria-label="Loan product">
+        {LOAN_PRODUCTS.map((product, i) => {
           const isActive = product.id === loanProductId;
           return (
             <button
               key={product.id}
+              role="radio"
+              aria-checked={isActive}
               onClick={() => handleSelect(product)}
-              className={`relative p-4 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
-                isActive
-                  ? 'border-white/30 bg-white/15 shadow-lg scale-[1.02]'
-                  : 'border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20'
+              style={isActive ? { background: product.theme.primary } : undefined}
+              className={`text-left p-4 cursor-pointer transition-colors border-ink ${i % 2 === 1 ? 'border-l-[1.5px]' : ''} ${i > 0 ? 'md:border-l-[1.5px]' : ''} ${i > 1 ? 'border-t-[1.5px] md:border-t-0' : ''} ${
+                isActive ? 'text-paper' : 'hover:bg-paper'
               }`}
             >
-              <div className="text-2xl mb-2">{product.icon}</div>
-              <div className="text-sm font-semibold text-white">{product.name}</div>
-              <div className="text-xs text-white/50 mt-1">{product.defaultRate}% typical</div>
-              {isActive && (
-                <div
-                  className="absolute top-2 right-2 w-2 h-2 rounded-full"
-                  style={{ backgroundColor: product.theme.accent }}
-                />
-              )}
+              <div className={`num text-xs ${isActive ? 'text-gold' : 'text-muted'}`}>{product.icon}</div>
+              <div className="display text-xl font-semibold mt-3 leading-tight">{product.name}</div>
+              <div className={`num text-xs mt-1 ${isActive ? 'text-paper/70' : 'text-muted'}`}>{product.defaultRate}% typical</div>
             </button>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }

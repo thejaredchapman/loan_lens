@@ -15,7 +15,7 @@ export const useStore = create(
 
       propertyPrice: 350000,
       downPaymentPercent: 20,
-      interestRate: 6.75,
+      interestRate: 7.25,
       loanTerm: 30,
       setPropertyPrice: (val) => set({ propertyPrice: val }),
       setDownPaymentPercent: (val) => set({ downPaymentPercent: val }),
@@ -28,7 +28,7 @@ export const useStore = create(
       setDtiRatio: (val) => set({ dtiRatio: val }),
     }),
     {
-      name: 'amortization-prefs',
+      name: 'amortization-prefs-v2',
     }
   )
 );

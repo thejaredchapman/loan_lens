@@ -1,32 +1,31 @@
 import { useStore } from '../store/useStore';
 
+const MODES = [
+  { id: 'property', label: 'I have a price in mind' },
+  { id: 'salary', label: 'I know my salary' },
+];
+
 export default function SearchModeToggle() {
   const { searchMode, setSearchMode } = useStore();
 
   return (
-    <div className="mb-6">
-      <div className="inline-flex rounded-lg bg-white/5 border border-white/10 p-1">
-        <button
-          onClick={() => setSearchMode('property')}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 cursor-pointer ${
-            searchMode === 'property'
-              ? 'bg-white/15 text-white shadow-sm'
-              : 'text-white/50 hover:text-white/70'
-          }`}
-        >
-          Search by Property
-        </button>
-        <button
-          onClick={() => setSearchMode('salary')}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 cursor-pointer ${
-            searchMode === 'salary'
-              ? 'bg-white/15 text-white shadow-sm'
-              : 'text-white/50 hover:text-white/70'
-          }`}
-        >
-          Search by Salary
-        </button>
-      </div>
+    <div className="mb-6 flex flex-wrap gap-x-8 gap-y-2 border-b border-rule rise" style={{ '--i': 1 }} role="tablist">
+      {MODES.map((m) => {
+        const active = searchMode === m.id;
+        return (
+          <button
+            key={m.id}
+            role="tab"
+            aria-selected={active}
+            onClick={() => setSearchMode(m.id)}
+            className={`display text-xl pb-2 -mb-px cursor-pointer border-b-[3px] transition-colors ${
+              active ? 'border-[var(--accent)] text-ink font-semibold' : 'border-transparent text-muted hover:text-ink'
+            }`}
+          >
+            {m.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

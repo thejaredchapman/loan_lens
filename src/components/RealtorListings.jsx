@@ -10,13 +10,9 @@ export default function RealtorListings({ city, maxAffordablePrice }) {
   if (!city) return null;
 
   return (
-    <div className="rounded-xl bg-white/5 border border-white/10 p-5 mb-6 backdrop-blur-sm">
-      <h3 className="text-sm font-medium text-white/60 mb-1 uppercase tracking-wider">
-        Real Estate Listings
-      </h3>
-      <p className="text-xs text-white/30 mb-4">
-        Browse current listings on Realtor.com for {city.name}, {city.state}
-      </p>
+    <section className="panel">
+      <h3 className="kicker mb-1">Real estate listings</h3>
+      <p className="text-sm text-muted mb-5">Browse current listings on Realtor.com for {city.name}, {city.state}</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {links.map((link, i) => (
@@ -25,20 +21,16 @@ export default function RealtorListings({ city, maxAffordablePrice }) {
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition group"
+            className="group flex items-center justify-between gap-3 px-4 py-3 border-[1.5px] border-ink bg-paper hover:bg-[var(--accent)] hover:text-paper transition-colors"
           >
-            <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-sm group-hover:bg-white/15 transition">
-              🏠
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-sm text-white/80 group-hover:text-white transition truncate">
-                {link.label}
-              </div>
-              <div className="text-xs text-white/30">realtor.com →</div>
-            </div>
+            <span className="min-w-0">
+              <span className="block text-sm font-semibold truncate">{link.label}</span>
+              <span className="block text-xs text-muted group-hover:text-paper/70">realtor.com</span>
+            </span>
+            <span aria-hidden="true" className="display text-xl transition-transform group-hover:translate-x-1">→</span>
           </a>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

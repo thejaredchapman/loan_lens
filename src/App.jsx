@@ -5,7 +5,6 @@ import { LOAN_PRODUCTS } from './data/loanProducts';
 import { calculatePITI, generateAmortizationSchedule } from './utils/amortization';
 import { calculateRequiredSalary, calculateMaxAffordablePrice } from './utils/affordability';
 
-import DynamicBackground from './components/DynamicBackground';
 import Navbar from './components/Navbar';
 import LoanProductSelector from './components/LoanProductSelector';
 import SearchModeToggle from './components/SearchModeToggle';
@@ -106,11 +105,10 @@ export default function App() {
   const showCityInfo = product.id === 'home' && city;
 
   return (
-    <div className="min-h-screen relative text-white">
-      <DynamicBackground />
+    <div className="min-h-screen" data-product={product.id}>
       <Navbar />
 
-      <main className="container mx-auto px-4 py-8 max-w-7xl relative z-10">
+      <main className="mx-auto px-4 sm:px-6 py-10 max-w-6xl">
         <LoanProductSelector />
         <SearchModeToggle />
 
@@ -130,7 +128,7 @@ export default function App() {
 
         {activePiti && (
           <>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-x-8">
               <AmortizationResults piti={activePiti} product={product} />
               <PaymentBreakdownChart piti={activePiti} product={product} />
             </div>
